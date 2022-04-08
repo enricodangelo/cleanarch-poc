@@ -6,3 +6,7 @@ export interface DatabaseConfig {
     port: number;
     name: string;
 }
+
+export interface HTTPServerConfig {
+    port: number;
+}

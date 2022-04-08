@@ -1,10 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { DatabaseConfig } from './configuration.interface';
+import { DatabaseConfig, HTTPServerConfig } from './configuration.interface';
 
 @Injectable()
 export class ConfigurationService {
     constructor(private configService: ConfigService) {}
+
+    get httpServerConfig(): HTTPServerConfig {
+        return {
+            port: this.configService.get<number>('PORT'),
+        };
+    }
 
     get databaseConfig(): DatabaseConfig {
         return {
