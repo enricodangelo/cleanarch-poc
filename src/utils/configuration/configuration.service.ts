@@ -12,7 +12,7 @@ export class ConfigurationService {
             username: this.configService.get<string>('DATABASE__USERNAME'),
             password: this.configService.get<string>('DATABASE__PASSWORD'),
             host: this.configService.get<string>('DATABASE__HOST'),
-            port: this.configService.get<number>('DATABASE__PORT'),
+            port: this.configService.get<number>('DATABASE__PORT') || 5432,
             name: this.configService.get<string>('DATABASE__NAME'),
         };
     }
