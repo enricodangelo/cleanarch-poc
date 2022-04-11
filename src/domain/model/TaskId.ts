@@ -1,7 +1,7 @@
-import { EntityId } from './EntityId';
+import { ModelId } from './ModelId';
 import { validate } from 'uuid';
 
-export class TaskId extends EntityId<string> {
+export class TaskId extends ModelId<string> {
     private static nextId = 1;
 
     constructor(value: string) {

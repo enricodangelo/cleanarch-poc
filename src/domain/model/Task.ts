@@ -26,7 +26,7 @@ export class Task {
         return this._title;
     }
 
-    get notes(): string {
+    get notes(): string | undefined {
         return this._notes;
     }
 
@@ -36,6 +36,10 @@ export class Task {
 
     set pos(pos) {
         this._pos = pos;
+    }
+
+    get status(): TASK_STATUS {
+        return this._status;
     }
 
     isCompleted(): boolean {
@@ -60,6 +64,6 @@ export class StoredTask extends Task {
     }
 }
 
-export function isStoredTask(task: any): task is StoredTask {
+export function isStoredTask(task: Task): task is StoredTask {
     return task instanceof StoredTask;
 }

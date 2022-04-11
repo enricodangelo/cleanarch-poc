@@ -1,6 +1,6 @@
 export type EntityType = 'Task' | 'TodoList';
 
-export abstract class EntityId<T> {
+export abstract class ModelId<T> {
     readonly type: EntityType;
     readonly value: T;
 
@@ -14,7 +14,7 @@ export abstract class EntityId<T> {
 
     abstract validateInput(value: T): boolean;
 
-    equals(otherEntity: EntityId<T>): boolean {
+    equals(otherEntity: ModelId<T>): boolean {
         if (this.type != otherEntity.type) {
             return false;
         }

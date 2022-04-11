@@ -72,6 +72,6 @@ export class StoredTodoList extends TodoList {
     }
 }
 
-export function isStoredTodoList(todoList: any): todoList is StoredTodoList {
+export function isStoredTodoList(todoList: TodoList): todoList is StoredTodoList {
     return todoList instanceof StoredTodoList;
 }

@@ -1,9 +1,7 @@
-import { EntityId } from './EntityId';
+import { ModelId } from './ModelId';
 import { validate } from 'uuid';
 
-export class TodoListId extends EntityId<string> {
-    private static nextId = 1;
-
+export class TodoListId extends ModelId<string> {
     constructor(value: string) {
         super('TodoList', value);
     }
