@@ -1,9 +1,15 @@
-export interface ITransaction {
+export interface ITransaction<T> {
+    context: T;
+
+    isActive: boolean;
+
+    isClosed: boolean;
+
     start(): Promise<void>;
 
     commit(): Promise<void>;
 
     rollback(): Promise<void>;
 
-    release(): Promise<void>;
+    close(): Promise<void>;
 }

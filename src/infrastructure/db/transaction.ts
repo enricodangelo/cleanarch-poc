@@ -1,16 +1,12 @@
 import { QueryRunner } from 'typeorm';
 import { ITransaction } from '../../domain/repository/transaction.interface';
 
-export interface ITypeORMTransaction extends ITransaction {
-    queryRunner: QueryRunner;
-}
-
-export class Transaction implements ITypeORMTransaction { //ITransaction {
+export class Transaction implements ITransaction<QueryRunner> {
     // TODO business exception if calling method after release (use internal state)
-    readonly _queryRunner: QueryRunner;
+    readonly queryRunner: QueryRunner;
 
     constructor(queryRunner: QueryRunner) {
-        this._queryRunner = queryRunner;
+        this.queryRunner = queryRunner;
     }
 
     async start(): Promise<void> {
@@ -40,11 +36,19 @@ export class Transaction implements ITypeORMTransaction { //ITransaction {
             await queryRunner.release();
         }
      */
-    async release(): Promise<void> {
+    async close(): Promise<void> {
         await this.queryRunner.release();
     }
 
-    get queryRunner(): QueryRunner {
-        return this._queryRunner;
+    get context(): QueryRunner {
+        return this.queryRunner;
+    }
+
+    get isActive(): boolean {
+        return this.queryRunner.isTransactionActive;
+    }
+
+    get isClosed(): boolean {
+        return this.queryRunner.isReleased;
     }
 }

@@ -1,9 +1,12 @@
-import { createConnection } from 'typeorm';
+import { Connection, createConnection } from 'typeorm';
 import { ConfigurationService } from '../../utils/configuration/configuration.service';
+import { TaskEntity } from './entity/task.entity';
+import { TodoListEntity } from './entity/todoList.entity';
 
 export const databaseProviders = [
     {
-        provide: 'DATABASE_CONNECTION',
+        provide: 'ASYNC_CONNECTION',
+        inject: [ConfigurationService, Connection],
         useFactory: async (configurationService: ConfigurationService) =>
             await createConnection({
                 type: configurationService.databaseConfig.dialect,
@@ -12,8 +15,9 @@ export const databaseProviders = [
                 username: configurationService.databaseConfig.username,
                 password: configurationService.databaseConfig.password,
                 database: configurationService.databaseConfig.name,
-                entities: [__dirname + '/entity/*.entity{.ts,.js}'],
+                entities: [TodoListEntity, TaskEntity],
                 synchronize: true,
+                uuidExtension: 'pgcrypto',
             }),
     },
 ];

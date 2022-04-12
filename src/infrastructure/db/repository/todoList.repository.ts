@@ -1,4 +1,4 @@
-import { DeleteResult, getRepository, QueryBuilder, QueryRunner, Repository, UpdateResult } from 'typeorm';
+import { DeleteResult, getRepository, InsertResult, QueryBuilder, QueryRunner, Repository, UpdateResult } from 'typeorm';
 import { isStoredTask, StoredTask, Task } from '../../../domain/model/Task';
 import { TaskId } from '../../../domain/model/TaskId';
 import { isStoredTodoList, StoredTodoList, TodoList } from '../../../domain/model/TodoList';
@@ -8,61 +8,69 @@ import { CleanPocError, CLEANPOC_ERROR } from '../../../utils/error/CleanPocErro
 import { TaskEntity } from '../entity/task.entity';
 import { TodoListEntity } from '../entity/todoList.entity';
 import { ITransaction } from '../../../domain/repository/transaction.interface';
-import { ITOTodoListRepository } from './toTodoListRepository.interface';
-import { ITypeORMTransaction } from '../transaction';
+import { BaseRepository } from './base.repository';
+import { Injectable } from '@nestjs/common';
 
-// TODO this will not work, the nestjs module is exporting ITodoListRepository, not ITOTodoListRepository...
-export class TodoListRepository implements ITOTodoListRepository {
+@Injectable()
+export class TodoListRepository extends BaseRepository implements ITodoListRepository<QueryRunner> {
     private toTodoListRepository: Repository<TodoListEntity>;
     private toTaskRepository: Repository<TaskEntity>;
 
     constructor() {
+        super();
         this.toTodoListRepository = getRepository<TodoListEntity>(TodoListEntity);
         this.toTaskRepository = getRepository<TaskEntity>(TaskEntity);
     }
-    async save(todoList: TodoList, transaction?: ITypeORMTransaction): Promise<TodoList> {
-        const queryBuilder: QueryBuilder<TodoListEntity> = this.toTodoListRepository.createQueryBuilder('todoList', transaction?.queryRunner);
 
-        const entity: TodoListEntity = await this.toTodoListRepository.save(this.todoListModelToEntity(todoList));
+    async save(todoList: TodoList, transaction?: ITransaction<QueryRunner>): Promise<TodoList> {
+        const queryBuilder: QueryBuilder<TodoListEntity> = this.getQueryBuilder(this.toTodoListRepository, 'todoList', transaction);
+
+        const entity: TodoListEntity = this.todoListModelToEntity(todoList);
+        const insertRes: InsertResult = await queryBuilder.insert().into(TodoListEntity).values(entity).execute();
+        entity.id = String(insertRes.identifiers[0]);
         return this.todoListEntityToModel(entity);
     }
 
-    // async save(todoList: TodoList): Promise<TodoList> {
-    //     const entity: TodoListEntity = await this.toTodoListRepository.save(this.todoListModelToEntity(todoList));
-    //     return this.todoListEntityToModel(entity);
-    // }
+    async update(todoList: StoredTodoList, transaction?: ITransaction<QueryRunner>): Promise<TodoList> {
+        const queryBuilder: QueryBuilder<TodoListEntity> = this.getQueryBuilder(this.toTodoListRepository, 'todoList', transaction);
 
-    async update(todoList: StoredTodoList): Promise<TodoList> {
-        const updateResult: UpdateResult = await this.toTodoListRepository.update({ id: todoList.id.value }, this.todoListModelToEntity(todoList));
+        const entity: TodoListEntity = this.todoListModelToEntity(todoList);
+        const updateResult: UpdateResult = await queryBuilder
+            .update()
+            .set({ ...entity, id: undefined })
+            .where('id = :id', { id: todoList.id.value })
+            .execute();
         const affected: number | null | undefined = updateResult?.affected;
         if (!affected) {
             // todo throw error unknown result, affected was null
             throw new Error('TODO update');
         }
         if (affected > 1) {
-            // TODO throw error, more than 1 row with same id
-            throw new Error('TODO update');
+            throw new CleanPocError(CLEANPOC_ERROR.TOO_MANY_ENTITIES, `Too many TodoList entities updated with id "${todoList.id}"`);
         } else if (affected === 0) {
             throw new CleanPocError(CLEANPOC_ERROR.ENTITY_NOT_FOUND, `Cannot update TodoList with id "${todoList.id}", entity not found`);
         }
         return (await this.findByPKey(todoList.id)) as TodoList;
     }
 
-    async findByPKey(todoListId: TodoListId): Promise<TodoList | undefined> {
-        const entity: TodoListEntity | undefined = await this.toTodoListRepository.findOne({ id: todoListId.value });
-        return entity ? this.todoListEntityToModel(entity) : undefined;
+    async findByPKey(todoListId: TodoListId, transaction?: ITransaction<QueryRunner>): Promise<TodoList | undefined> {
+        const queryBuilder: QueryBuilder<TodoListEntity> = this.getQueryBuilder(this.toTodoListRepository, 'todoList', transaction);
+
+        const res: TodoListEntity[] = await queryBuilder.select().where('id = :id', { id: todoListId.value }).getMany();
+        if (res.length > 1) {
+            throw new CleanPocError(CLEANPOC_ERROR.TOO_MANY_ENTITIES, `Too many TodoList entities found with id "${todoListId}"`);
+        }
+        return res.length === 1 ? this.todoListEntityToModel(res[0]) : undefined;
     }
 
-    async delete(todoListId: TodoListId): Promise<boolean> {
-        const delResult: DeleteResult = await this.toTodoListRepository.delete({ id: todoListId.value });
+    async delete(todoListId: TodoListId, transaction?: ITransaction<QueryRunner>): Promise<boolean> {
+        const queryBuilder: QueryBuilder<TodoListEntity> = this.getQueryBuilder(this.toTodoListRepository, 'todoList', transaction);
+
+        const delResult: DeleteResult = await queryBuilder.delete().where('id = :id', { id: todoListId.value }).execute();
         const affected: number | null | undefined = delResult?.affected;
-        if (affected) {
-            if (affected > 1) {
-                // TODO throw error, more than 1 row with same id
-            }
-            return delResult.affected === 1;
+        if (affected && affected > 1) {
+            throw new CleanPocError(CLEANPOC_ERROR.TOO_MANY_ENTITIES, `Too many TodoList entities deleted with id "${todoListId}"`);
         }
-        // I assume I deleted the entity if no exception is throwm
         return true;
     }
 
