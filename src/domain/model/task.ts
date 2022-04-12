@@ -1,4 +1,4 @@
-import { TaskId } from './TaskId';
+import { TaskId } from './taskId';
 
 export enum TASK_STATUS {
     TODO = 'TODO',

@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Inject, Param, Post } from '@nestjs/common';
-import { TodoList } from '../../../domain/model/TodoList';
-import { TodoListId } from '../../../domain/model/TodoListId';
+import { TodoList } from '../../../domain/model/todoList';
+import { TodoListId } from '../../../domain/model/todoListId';
 import { CreateNewListUsecase } from '../../../usecase/createNewList.usecase copy';
 import { GetTodoListsByIdUsecase } from '../../../usecase/getTodoListsById.usecase';
 

@@ -1,7 +1,7 @@
 import { CleanPocError, CLEANPOC_ERROR } from '../../utils/error/CleanPocErrors';
-import { isStoredTask, Task } from './Task';
-import { TaskId } from './TaskId';
-import { TodoListId } from './TodoListId';
+import { isStoredTask, Task } from './task';
+import { TaskId } from './taskId';
+import { TodoListId } from './todoListId';
 
 export class TodoList {
     private _name: string;

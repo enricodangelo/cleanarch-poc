@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { QueryRunner } from 'typeorm';
-import { TodoList } from '../domain/model/TodoList';
+import { TodoList } from '../domain/model/todoList';
 import { ITodoListRepository, TODOLIST_REPOSITORY_TOKEN } from '../domain/repository/todoList.repository.interface';
 import { ITransaction } from '../domain/repository/transaction.interface';
 import { DB_SERVICE_TOKEN, IDBService } from '../infrastructure/db/db.service.interface';

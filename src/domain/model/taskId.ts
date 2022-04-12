@@ -1,4 +1,4 @@
-import { ModelId } from './ModelId';
+import { ModelId } from './modelId';
 import { validate } from 'uuid';
 
 export class TaskId extends ModelId<string> {

@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { QueryRunner } from 'typeorm';
-import { TodoList } from '../domain/model/TodoList';
-import { TodoListId } from '../domain/model/TodoListId';
+import { TodoList } from '../domain/model/todoList';
+import { TodoListId } from '../domain/model/todoListId';
 import { ITodoListRepository, TODOLIST_REPOSITORY_TOKEN } from '../domain/repository/todoList.repository.interface';
 import { IUsecase } from './usecase.interface';
 

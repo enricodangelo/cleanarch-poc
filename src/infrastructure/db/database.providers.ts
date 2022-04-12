@@ -5,7 +5,7 @@ import { TodoListEntity } from './entity/todoList.entity';
 
 export const databaseProviders = [
     {
-        provide: 'ASYNC_CONNECTION',
+        provide: 'CONNECTION',
         inject: [ConfigurationService, Connection],
         useFactory: async (configurationService: ConfigurationService) =>
             await createConnection({

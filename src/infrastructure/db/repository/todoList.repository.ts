@@ -1,8 +1,8 @@
 import { DeleteResult, getRepository, InsertResult, QueryBuilder, QueryRunner, Repository, UpdateResult } from 'typeorm';
-import { isStoredTask, StoredTask, Task } from '../../../domain/model/Task';
-import { TaskId } from '../../../domain/model/TaskId';
-import { isStoredTodoList, StoredTodoList, TodoList } from '../../../domain/model/TodoList';
-import { TodoListId } from '../../../domain/model/TodoListId';
+import { isStoredTask, StoredTask, Task } from '../../../domain/model/task';
+import { TaskId } from '../../../domain/model/taskId';
+import { isStoredTodoList, StoredTodoList, TodoList } from '../../../domain/model/todoList';
+import { TodoListId } from '../../../domain/model/todoListId';
 import { ITodoListRepository } from '../../../domain/repository/todoList.repository.interface';
 import { CleanPocError, CLEANPOC_ERROR } from '../../../utils/error/CleanPocErrors';
 import { TaskEntity } from '../entity/task.entity';

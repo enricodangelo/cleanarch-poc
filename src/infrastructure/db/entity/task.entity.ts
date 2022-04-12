@@ -1,5 +1,5 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { TASK_STATUS } from '../../../domain/model/Task';
+import { TASK_STATUS } from '../../../domain/model/task';
 import { TodoListEntity } from './todoList.entity';
 
 @Entity()
