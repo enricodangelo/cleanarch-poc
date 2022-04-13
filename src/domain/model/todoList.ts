@@ -1,19 +1,23 @@
 import { CleanPocError, CLEANPOC_ERROR } from '../../utils/error/CleanPocErrors';
+import { Owner } from './owner';
 import { isStoredTask, Task } from './task';
 import { TaskId } from './taskId';
 import { TodoListId } from './todoListId';
+import { UserIdentity } from './userIdentity';
 
 export class TodoList {
     private _name: string;
     private _tasks: Task[];
+    private _owner: Owner;
 
-    protected constructor(name: string, tasks: Task[]) {
+    protected constructor(name: string, tasks: Task[], userId: string) {
         this._name = name;
         this._tasks = tasks;
+        this._owner = new Owner(userId);
     }
 
-    static createNewTodoList(name: string): TodoList {
-        return new TodoList(name, []);
+    static createNewTodoList(name: string, userIdentity: UserIdentity): TodoList {
+        return new TodoList(name, [], userIdentity.sub);
     }
 
     get name(): string {
@@ -22,6 +26,10 @@ export class TodoList {
 
     get tasks(): Task[] {
         return this._tasks;
+    }
+
+    get owner(): Owner {
+        return this._owner;
     }
 
     moveTaskToPos(taskId: TaskId, newPos: number): void {
@@ -66,8 +74,8 @@ export class TodoList {
 export class StoredTodoList extends TodoList {
     readonly id: TodoListId;
 
-    constructor(id: TodoListId, name: string, tasks: Task[]) {
-        super(name, tasks);
+    constructor(id: TodoListId, name: string, tasks: Task[], userId: string) {
+        super(name, tasks, userId);
         this.id = id;
     }
 }

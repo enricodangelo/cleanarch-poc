@@ -16,10 +16,13 @@ export class Transaction implements ITransaction<QueryRunner> {
 
     async commit(): Promise<void> {
         await this.queryRunner.commitTransaction();
+        // TODO do I need this or am I closing the default connection to the db?
+        await this.queryRunner.release();
     }
 
     async rollback(): Promise<void> {
         await this.queryRunner.rollbackTransaction();
+        await this.queryRunner.release();
     }
 
     // TODO is this method necessary? // called in finally branch
@@ -36,9 +39,9 @@ export class Transaction implements ITransaction<QueryRunner> {
             await queryRunner.release();
         }
      */
-    async close(): Promise<void> {
-        await this.queryRunner.release();
-    }
+    // async close(): Promise<void> {
+    //     await this.queryRunner.release();
+    // }
 
     get context(): QueryRunner {
         return this.queryRunner;

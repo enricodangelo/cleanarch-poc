@@ -11,5 +11,5 @@ export interface ITransaction<T> {
 
     rollback(): Promise<void>;
 
-    close(): Promise<void>;
+    // close(): Promise<void>;
 }
