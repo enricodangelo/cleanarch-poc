@@ -1,4 +1,5 @@
-import { Body, Controller, Get, Inject, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Inject, Param, Post, Req } from '@nestjs/common';
+import { Request } from 'express';
 import { TodoList } from '../../../domain/model/todoList';
 import { TodoListId } from '../../../domain/model/todoListId';
 import { CreateNewListUsecase } from '../../../usecase/createNewList.usecase';
@@ -12,8 +13,8 @@ export class TodoListController {
     ) {}
 
     @Post()
-    async post(@Body() body: { name: string }): Promise<TodoList> {
-        const todoList: TodoList = await this.createNewListUsecase.execute(body.name);
+    async post(@Body() body: { name: string }, @Req() req: Request): Promise<TodoList> {
+        const todoList: TodoList = await this.createNewListUsecase.execute(body.name, req. user);
         return todoList;
     }
 
