@@ -6,7 +6,7 @@ import { OwnerEntity } from './infrastructure/db/entity/owner.entity';
 import { TaskEntity } from './infrastructure/db/entity/task.entity';
 import { TodoListEntity } from './infrastructure/db/entity/todoList.entity';
 import { TypeOrmConfigService } from './infrastructure/db/typeormConfiguration.service';
-import { RestApiModule } from './infrastructure/restapi/http.module';
+import { RestApiModule } from './infrastructure/restapi/restapi.module';
 import { ConfigurationService } from './utils/configuration/configuration.service';
 import { UtilsModule } from './utils/utils.module';
 
