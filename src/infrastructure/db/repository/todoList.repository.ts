@@ -11,17 +11,22 @@ import { ITransaction } from '../../../domain/repository/transaction.interface';
 import { BaseRepository } from './base.repository';
 import { Injectable } from '@nestjs/common';
 import { OwnerEntity } from '../entity/owner.entity';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class TodoListRepository extends BaseRepository implements ITodoListRepository<QueryRunner> {
-    private todoListTypeOrmRepository: Repository<TodoListEntity>;
-    private taskTypeOrmRepository: Repository<TaskEntity>;
-    private ownerTypeOrmRepository: Repository<OwnerEntity>;
+    // private todoListTypeOrmRepository: Repository<TodoListEntity>;
+    // private taskTypeOrmRepository: Repository<TaskEntity>;
+    // private ownerTypeOrmRepository: Repository<OwnerEntity>;
 
-    constructor() {
+    constructor(
+        @InjectRepository(TodoListEntity) private todoListTypeOrmRepository: Repository<TodoListEntity>,
+        @InjectRepository(TaskEntity) private taskTypeOrmRepository: Repository<TaskEntity>,
+        @InjectRepository(OwnerEntity) private ownerTypeOrmRepository: Repository<OwnerEntity>,
+    ) {
         super();
-        this.todoListTypeOrmRepository = getRepository<TodoListEntity>(TodoListEntity);
-        this.taskTypeOrmRepository = getRepository<TaskEntity>(TaskEntity);
+        // this.todoListTypeOrmRepository = getRepository<TodoListEntity>(TodoListEntity);
+        // this.taskTypeOrmRepository = getRepository<TaskEntity>(TaskEntity);
     }
 
     async save(todoList: TodoList, transaction?: ITransaction<QueryRunner>): Promise<TodoList> {
@@ -83,7 +88,7 @@ export class TodoListRepository extends BaseRepository implements ITodoListRepos
             entity.tasks.map((taskEntity) => {
                 return this.taskEntityToModel(taskEntity);
             }),
-            'userId',   // TODO modify queries to include join with owner and get userId
+            'userId', // TODO modify queries to include join with owner and get userId
         );
     }
 

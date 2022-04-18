@@ -15,7 +15,7 @@ import { UtilsModule } from './utils/utils.module';
     //     UtilsModule,
     //     RestApiModule,
     //     TypeOrmModule.forRootAsync({
-    //         imports: [DatabaseModule, Connection],
+    //         imports: [DatabaseModule, UtilsModule, Connection],
     //         // inject: [ConfigurationService],
     //         useClass: TypeOrmConfigService,
     //     }),
@@ -34,6 +34,6 @@ import { UtilsModule } from './utils/utils.module';
         }),
     ],
 })
-export class AppModule {}
-// constructor(private connection: Connection) {}
-// }
+export class AppModule {
+    constructor(private connection: Connection) {}
+  }
