@@ -5,7 +5,7 @@ import { IAuthorizationService } from './authorization.service.interface';
 
 export class AuthorizationService implements IAuthorizationService {
     isOwner(todoList: TodoList, userIdentity: UserIdentity): void {
-        if (!userIdentity.isSame(todoList.owner)) {
+        if (!userIdentity.isOwner(todoList.owner)) {
             throw new CleanPocError(CLEANPOC_ERROR.UNAUTHORIZED);
         }
     }

@@ -10,7 +10,7 @@ import { TodoListEntity } from '../entity/todoList.entity';
 import { ITransaction } from '../../../domain/repository/transaction.interface';
 import { BaseRepository } from './base.repository';
 import { Injectable } from '@nestjs/common';
-import { OwnerEntity } from '../entity/ownerRelationship.entity';
+import { OwnerEntity } from '../entity/owner.entity';
 
 @Injectable()
 export class TodoListRepository extends BaseRepository implements ITodoListRepository<QueryRunner> {

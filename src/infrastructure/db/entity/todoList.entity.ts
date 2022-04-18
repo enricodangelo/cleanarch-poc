@@ -1,5 +1,5 @@
 import { Column, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { OwnerEntity } from './ownerRelationship.entity';
+import { OwnerEntity } from './owner.entity';
 import { TaskEntity } from './task.entity';
 
 @Entity()

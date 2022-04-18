@@ -16,7 +16,7 @@ export class TaskEntity {
     @Column('text')
     notes: string;
 
-    @Column('number')
+    @Column('smallint')
     pos: number;
 
     @Column('enum', { enum: Object.values(TASK_STATUS) })
