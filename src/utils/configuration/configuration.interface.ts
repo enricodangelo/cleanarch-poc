@@ -1,4 +1,3 @@
-
 export type dbDialectType = 'postgres';
 export interface DatabaseConfig {
     dialect: dbDialectType;

@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { QueryRunner } from 'typeorm';
 import { AUTHORIZATION_SERVICE_TOKEN, IAuthorizationService } from '../application/authorization.service.interface';
 import { TodoList } from '../domain/model/todoList';
@@ -12,6 +12,8 @@ import { IUsecase } from './usecase.interface';
 
 @Injectable()
 export class GetTodoListsByIdUsecase implements IUsecase<TodoList | undefined> {
+    private readonly logger = new Logger(GetTodoListsByIdUsecase.name);
+
     constructor(
         @Inject(DB_SERVICE_TOKEN) private readonly dbService: IDBService,
         @Inject(TODOLIST_REPOSITORY_TOKEN) private readonly todoListRepository: ITodoListRepository<QueryRunner>,
@@ -19,6 +21,7 @@ export class GetTodoListsByIdUsecase implements IUsecase<TodoList | undefined> {
     ) {}
 
     async execute(todoListId: TodoListId, userIdentity: UserIdentity): Promise<TodoList | undefined> {
+        this.logger.log(`Starting CreateNewListUsecase`);
         const transaction: ITransaction<QueryRunner> = this.dbService.newTransaction();
 
         try {
@@ -30,9 +33,11 @@ export class GetTodoListsByIdUsecase implements IUsecase<TodoList | undefined> {
             // will throw an eception if not the owner
             this.authorizationService.isOwner(list, userIdentity);
             transaction.commit();
+            this.logger.log(`Succesfully executed CreateNewListUsecase`);
             return list;
         } catch (err) {
             transaction.rollback();
+            this.logger.log(`Error in CreateNewListUsecase`);
             throw err;
         }
     }

@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { UsecaseModule } from '../../usecase/usecase.module';
 import { TodoListController } from './controller/todoList.controller';
 
@@ -6,4 +6,8 @@ import { TodoListController } from './controller/todoList.controller';
     imports: [UsecaseModule],
     controllers: [TodoListController],
 })
-export class RestApiModule {}
+export class RestApiModule {
+    constructor() {
+        Logger.debug(`RestApiModule constructed`);
+    }
+}

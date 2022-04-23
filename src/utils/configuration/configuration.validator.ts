@@ -6,7 +6,7 @@ export const ConfigurationSchema: ObjectSchema = Joi.object({
     // http config
     PORT: Joi.number().required(),
     // database
-    DATABASE__DIALECT: Joi.string().valid('postgresql').required(),
+    DATABASE__DIALECT: Joi.string().valid('postgres').required(),
     DATABASE__USERNAME: Joi.string().required(),
     DATABASE__PASSWORD: Joi.string().required(),
     DATABASE__HOST: Joi.string().required(),

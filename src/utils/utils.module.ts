@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { ConfigurationService } from './configuration/configuration.service';
 import { ConfigurationSchema } from './configuration/configuration.validator';
@@ -14,4 +14,8 @@ import { ConfigurationSchema } from './configuration/configuration.validator';
     providers: [ConfigurationService],
     exports: [ConfigurationService],
 })
-export class UtilsModule {}
+export class UtilsModule {
+    constructor() {
+        Logger.debug(`UtilsModule constructed`);
+    }
+}

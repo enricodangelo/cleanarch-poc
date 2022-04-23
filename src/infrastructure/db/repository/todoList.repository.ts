@@ -1,4 +1,4 @@
-import { DeleteResult, getRepository, InsertResult, QueryBuilder, QueryRunner, Repository, UpdateResult } from 'typeorm';
+import { DeleteResult, InsertResult, QueryBuilder, QueryRunner, UpdateResult } from 'typeorm';
 import { isStoredTask, StoredTask, Task } from '../../../domain/model/task';
 import { TaskId } from '../../../domain/model/taskId';
 import { isStoredTodoList, StoredTodoList, TodoList } from '../../../domain/model/todoList';
@@ -10,27 +10,25 @@ import { TodoListEntity } from '../entity/todoList.entity';
 import { ITransaction } from '../../../domain/repository/transaction.interface';
 import { BaseRepository } from './base.repository';
 import { Injectable } from '@nestjs/common';
-import { OwnerEntity } from '../entity/owner.entity';
-import { InjectRepository } from '@nestjs/typeorm';
+import { TodoListEntityRepository } from './typeorm/todoListEntity.repository';
+import { OwnerEntityRepository } from './typeorm/ownerEntity.repository';
+import { TaskEntityRepository } from './typeorm/taskEntity.repository';
 
 @Injectable()
 export class TodoListRepository extends BaseRepository implements ITodoListRepository<QueryRunner> {
-    // private todoListTypeOrmRepository: Repository<TodoListEntity>;
-    // private taskTypeOrmRepository: Repository<TaskEntity>;
-    // private ownerTypeOrmRepository: Repository<OwnerEntity>;
-
     constructor(
-        @InjectRepository(TodoListEntity) private todoListTypeOrmRepository: Repository<TodoListEntity>,
-        @InjectRepository(TaskEntity) private taskTypeOrmRepository: Repository<TaskEntity>,
-        @InjectRepository(OwnerEntity) private ownerTypeOrmRepository: Repository<OwnerEntity>,
+        private todoListEntityRepository: TodoListEntityRepository,
+        private taskEntityRepository: TaskEntityRepository,
+        private ownerEntityRepository: OwnerEntityRepository,
     ) {
         super();
-        // this.todoListTypeOrmRepository = getRepository<TodoListEntity>(TodoListEntity);
-        // this.taskTypeOrmRepository = getRepository<TaskEntity>(TaskEntity);
     }
 
     async save(todoList: TodoList, transaction?: ITransaction<QueryRunner>): Promise<TodoList> {
-        const queryBuilder: QueryBuilder<TodoListEntity> = this.getQueryBuilder(this.todoListTypeOrmRepository, 'todoList', transaction);
+        const queryBuilder: QueryBuilder<TodoListEntity> = this.getQueryBuilder(this.todoListEntityRepository, 'todoList', transaction);
+
+        // TODO only to use the variable
+        this.ownerEntityRepository.count();
 
         const entity: TodoListEntity = this.todoListModelToEntity(todoList);
         const insertRes: InsertResult = await queryBuilder.insert().into(TodoListEntity).values(entity).execute();
@@ -39,7 +37,7 @@ export class TodoListRepository extends BaseRepository implements ITodoListRepos
     }
 
     async update(todoList: StoredTodoList, transaction?: ITransaction<QueryRunner>): Promise<TodoList> {
-        const queryBuilder: QueryBuilder<TodoListEntity> = this.getQueryBuilder(this.todoListTypeOrmRepository, 'todoList', transaction);
+        const queryBuilder: QueryBuilder<TodoListEntity> = this.getQueryBuilder(this.todoListEntityRepository, 'todoList', transaction);
 
         const entity: TodoListEntity = this.todoListModelToEntity(todoList);
         const updateResult: UpdateResult = await queryBuilder
@@ -61,7 +59,7 @@ export class TodoListRepository extends BaseRepository implements ITodoListRepos
     }
 
     async findByPKey(todoListId: TodoListId, transaction?: ITransaction<QueryRunner>): Promise<TodoList | undefined> {
-        const queryBuilder: QueryBuilder<TodoListEntity> = this.getQueryBuilder(this.todoListTypeOrmRepository, 'todoList', transaction);
+        const queryBuilder: QueryBuilder<TodoListEntity> = this.getQueryBuilder(this.todoListEntityRepository, 'todoList', transaction);
 
         const res: TodoListEntity[] = await queryBuilder.select().where('id = :id', { id: todoListId.value }).getMany();
         if (res.length > 1) {
@@ -71,7 +69,7 @@ export class TodoListRepository extends BaseRepository implements ITodoListRepos
     }
 
     async delete(todoListId: TodoListId, transaction?: ITransaction<QueryRunner>): Promise<boolean> {
-        const queryBuilder: QueryBuilder<TodoListEntity> = this.getQueryBuilder(this.todoListTypeOrmRepository, 'todoList', transaction);
+        const queryBuilder: QueryBuilder<TodoListEntity> = this.getQueryBuilder(this.todoListEntityRepository, 'todoList', transaction);
 
         const delResult: DeleteResult = await queryBuilder.delete().where('id = :id', { id: todoListId.value }).execute();
         const affected: number | null | undefined = delResult?.affected;
@@ -93,7 +91,7 @@ export class TodoListRepository extends BaseRepository implements ITodoListRepos
     }
 
     public todoListModelToEntity(model: TodoList): TodoListEntity {
-        const todoListEntity: TodoListEntity = this.todoListTypeOrmRepository.create({
+        const todoListEntity: TodoListEntity = this.todoListEntityRepository.create({
             id: isStoredTodoList(model) ? model.id.value : undefined,
             name: model.name,
         });
@@ -108,7 +106,7 @@ export class TodoListRepository extends BaseRepository implements ITodoListRepos
     }
 
     public taskModelToEntity(model: Task, todoListEntity: TodoListEntity): TaskEntity {
-        return this.taskTypeOrmRepository.create({
+        return this.taskEntityRepository.create({
             id: isStoredTask(model) ? model.id.value : undefined,
             todoList: todoListEntity,
             title: model.title,

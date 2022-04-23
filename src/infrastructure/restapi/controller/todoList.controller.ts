@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Inject, Param, Post, Req, Res, HttpStatus } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Req, Res, HttpStatus } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { TodoList } from '../../../domain/model/todoList';
 import { TodoListId } from '../../../domain/model/todoListId';
@@ -8,10 +8,7 @@ import { GetTodoListsByIdUsecase } from '../../../usecase/getTodoListsById.useca
 
 @Controller('todolist')
 export class TodoListController {
-    constructor(
-        @Inject() private readonly createNewListUsecase: CreateNewListUsecase,
-        @Inject() private readonly getTodoListsByIdUsecase: GetTodoListsByIdUsecase,
-    ) {}
+    constructor(private readonly createNewListUsecase: CreateNewListUsecase, private readonly getTodoListsByIdUsecase: GetTodoListsByIdUsecase) {}
 
     @Post()
     async post(@Body() body: { name: string }, @Req() req: Request, @Res() res: Response): Promise<TodoList | undefined> {
