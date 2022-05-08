@@ -2,7 +2,8 @@ import { StoredTodoList, TodoList } from '../model/todoList';
 import { TodoListId } from '../model/todoListId';
 import { ITransaction } from './transaction.interface';
 
-export const TODOLIST_REPOSITORY_TOKEN = 'ITodoListRepository';
+export const TODOLIST_REPOSITORY_INTERFACE = 'ITodoListRepository';
+
 export interface ITodoListRepository<T> {
     save(todoList: TodoList, transaction?: ITransaction<T>): Promise<TodoList>;
 

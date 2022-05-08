@@ -1,4 +1,4 @@
-export type EntityType = 'Task' | 'TodoList';
+export type EntityType = 'Owner' | 'Task' | 'TodoList';
 
 export abstract class ModelId<T> {
     readonly type: EntityType;

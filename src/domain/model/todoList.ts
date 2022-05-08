@@ -1,23 +1,22 @@
 import { CleanPocError, CLEANPOC_ERROR } from '../../utils/error/CleanPocErrors';
-import { Owner } from './owner';
+import { OwnerId } from './ownerId';
 import { isStoredTask, Task } from './task';
 import { TaskId } from './taskId';
 import { TodoListId } from './todoListId';
-import { UserIdentity } from './userIdentity';
 
 export class TodoList {
     private _name: string;
     private _tasks: Task[];
-    private _owner: Owner;
+    private _ownerId: OwnerId;
 
-    protected constructor(name: string, tasks: Task[], userId: string) {
+    protected constructor(name: string, tasks: Task[], ownerId: OwnerId) {
         this._name = name;
         this._tasks = tasks;
-        this._owner = new Owner(userId);
+        this._ownerId = ownerId;
     }
 
-    static createNewTodoList(name: string, userIdentity: UserIdentity): TodoList {
-        return new TodoList(name, [], userIdentity.sub);
+    static createNewTodoList(name: string, ownerId: OwnerId): TodoList {
+        return new TodoList(name, [], ownerId);
     }
 
     get name(): string {
@@ -28,8 +27,8 @@ export class TodoList {
         return this._tasks;
     }
 
-    get owner(): Owner {
-        return this._owner;
+    get ownerId(): OwnerId {
+        return this._ownerId;
     }
 
     moveTaskToPos(taskId: TaskId, newPos: number): void {
@@ -74,8 +73,8 @@ export class TodoList {
 export class StoredTodoList extends TodoList {
     readonly id: TodoListId;
 
-    constructor(id: TodoListId, name: string, tasks: Task[], userId: string) {
-        super(name, tasks, userId);
+    constructor(id: TodoListId, name: string, tasks: Task[], ownerId: OwnerId) {
+        super(name, tasks, ownerId);
         this.id = id;
     }
 }

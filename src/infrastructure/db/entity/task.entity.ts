@@ -2,7 +2,7 @@ import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { TASK_STATUS } from '../../../domain/model/task';
 import { TodoListEntity } from './todoList.entity';
 
-@Entity()
+@Entity({ name: 'task' })
 export class TaskEntity {
     @PrimaryGeneratedColumn('uuid')
     id: string;

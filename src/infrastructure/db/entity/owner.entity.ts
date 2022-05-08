@@ -1,14 +1,11 @@
-import { Entity, OneToOne, PrimaryColumn } from 'typeorm';
+import { Entity, OneToMany, PrimaryColumn } from 'typeorm';
 import { TodoListEntity } from './todoList.entity';
 
-@Entity()
+@Entity({ name: 'owner' })
 export class OwnerEntity {
     @PrimaryColumn('uuid')
     userId: string;
 
-    @PrimaryColumn('uuid')
-    todoListId: string;
-
-    @OneToOne(() => TodoListEntity, (todoListEntity) => todoListEntity.ownerRelationship)
-    todoList: TodoListEntity;
+    @OneToMany(() => TodoListEntity, (todoListEntity) => todoListEntity.owner)
+    todoLists: TodoListEntity[];
 }

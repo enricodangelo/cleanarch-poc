@@ -1,8 +1,8 @@
-import { Column, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { OwnerEntity } from './owner.entity';
 import { TaskEntity } from './task.entity';
 
-@Entity()
+@Entity({ name: 'todolist' })
 export class TodoListEntity {
     @PrimaryGeneratedColumn('uuid')
     id: string;
@@ -10,8 +10,11 @@ export class TodoListEntity {
     @OneToMany(() => TaskEntity, (taskEntity) => taskEntity.todoList)
     tasks: TaskEntity[];
 
-    @OneToOne(() => OwnerEntity, (ownerRelationship) => ownerRelationship.todoList)
-    ownerRelationship: OwnerEntity;
+    @ManyToOne(() => OwnerEntity, (ownerRelationship) => ownerRelationship.todoLists)
+    owner: OwnerEntity;
+
+    @Column('uuid')
+    ownerId: string;
 
     @Column('text')
     name: string;

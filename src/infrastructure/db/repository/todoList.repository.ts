@@ -13,6 +13,7 @@ import { Injectable } from '@nestjs/common';
 import { TodoListEntityRepository } from './typeorm/todoListEntity.repository';
 import { OwnerEntityRepository } from './typeorm/ownerEntity.repository';
 import { TaskEntityRepository } from './typeorm/taskEntity.repository';
+import { OwnerId } from '../../../domain/model/ownerId';
 
 @Injectable()
 export class TodoListRepository extends BaseRepository implements ITodoListRepository<QueryRunner> {
@@ -32,6 +33,7 @@ export class TodoListRepository extends BaseRepository implements ITodoListRepos
 
         const entity: TodoListEntity = this.todoListModelToEntity(todoList);
         const insertRes: InsertResult = await queryBuilder.insert().into(TodoListEntity).values(entity).execute();
+
         entity.id = String(insertRes.identifiers[0]);
         return this.todoListEntityToModel(entity);
     }
@@ -86,7 +88,7 @@ export class TodoListRepository extends BaseRepository implements ITodoListRepos
             entity.tasks.map((taskEntity) => {
                 return this.taskEntityToModel(taskEntity);
             }),
-            'userId', // TODO modify queries to include join with owner and get userId
+            new OwnerId(entity.owner.userId),
         );
     }
 
@@ -94,6 +96,7 @@ export class TodoListRepository extends BaseRepository implements ITodoListRepos
         const todoListEntity: TodoListEntity = this.todoListEntityRepository.create({
             id: isStoredTodoList(model) ? model.id.value : undefined,
             name: model.name,
+            ownerId: model.ownerId.value,
         });
         todoListEntity.tasks = model.tasks.map((taskModel) => {
             return this.taskModelToEntity(taskModel, todoListEntity);

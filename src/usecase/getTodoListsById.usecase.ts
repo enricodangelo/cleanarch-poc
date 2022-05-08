@@ -1,12 +1,12 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { QueryRunner } from 'typeorm';
-import { AUTHORIZATION_SERVICE_TOKEN, IAuthorizationService } from '../application/authorization.service.interface';
+import { AUTHORIZATION_SERVICE_INTERFACE, IAuthorizationService } from '../application/authorization.service.interface';
 import { TodoList } from '../domain/model/todoList';
 import { TodoListId } from '../domain/model/todoListId';
 import { UserIdentity } from '../domain/model/userIdentity';
-import { ITodoListRepository, TODOLIST_REPOSITORY_TOKEN } from '../domain/repository/todoList.repository.interface';
+import { ITodoListRepository, TODOLIST_REPOSITORY_INTERFACE } from '../domain/repository/todoList.repository.interface';
 import { ITransaction } from '../domain/repository/transaction.interface';
-import { DB_SERVICE_TOKEN, IDBService } from '../infrastructure/db/db.service.interface';
+import { DB_SERVICE_INTERFACE, IDBService } from '../infrastructure/db/db.service.interface';
 import { CleanPocError, CLEANPOC_ERROR } from '../utils/error/CleanPocErrors';
 import { IUsecase } from './usecase.interface';
 
@@ -15,9 +15,9 @@ export class GetTodoListsByIdUsecase implements IUsecase<TodoList | undefined> {
     private readonly logger = new Logger(GetTodoListsByIdUsecase.name);
 
     constructor(
-        @Inject(DB_SERVICE_TOKEN) private readonly dbService: IDBService,
-        @Inject(TODOLIST_REPOSITORY_TOKEN) private readonly todoListRepository: ITodoListRepository<QueryRunner>,
-        @Inject(AUTHORIZATION_SERVICE_TOKEN) private readonly authorizationService: IAuthorizationService,
+        @Inject(DB_SERVICE_INTERFACE) private readonly dbService: IDBService,
+        @Inject(TODOLIST_REPOSITORY_INTERFACE) private readonly todoListRepository: ITodoListRepository<QueryRunner>,
+        @Inject(AUTHORIZATION_SERVICE_INTERFACE) private readonly authorizationService: IAuthorizationService,
     ) {}
 
     async execute(todoListId: TodoListId, userIdentity: UserIdentity): Promise<TodoList | undefined> {

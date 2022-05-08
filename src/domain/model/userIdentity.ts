@@ -1,20 +1,20 @@
-import { Owner } from './owner';
+import { TodoList } from './todoList';
 
 export class UserIdentity {
-    readonly sub: string;
+    readonly subject: string;
     readonly scopes: string[];
 
     constructor(sub: string, scopes: string[]) {
-        this.sub = sub;
+        this.subject = sub;
         this.scopes = scopes;
     }
 
     equals(other: UserIdentity): boolean {
-        return this.sub === other.sub;
+        return this.subject === other.subject;
     }
 
-    isOwner(owner: Owner): boolean {
-        return this.sub === owner.userId;
+    isOwner(todoList: TodoList): boolean {
+        return this.subject === todoList.ownerId.value;
     }
 
     toString(): string {
