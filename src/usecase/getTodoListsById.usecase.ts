@@ -1,5 +1,4 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { QueryRunner } from 'typeorm';
 import { AUTHORIZATION_SERVICE_INTERFACE, IAuthorizationService } from '../application/authorization.service.interface';
 import { TodoList } from '../domain/model/todoList';
 import { TodoListId } from '../domain/model/todoListId';
@@ -16,13 +15,13 @@ export class GetTodoListsByIdUsecase implements IUsecase<TodoList | undefined> {
 
     constructor(
         @Inject(DB_SERVICE_INTERFACE) private readonly dbService: IDBService,
-        @Inject(TODOLIST_REPOSITORY_INTERFACE) private readonly todoListRepository: ITodoListRepository<QueryRunner>,
+        @Inject(TODOLIST_REPOSITORY_INTERFACE) private readonly todoListRepository: ITodoListRepository,
         @Inject(AUTHORIZATION_SERVICE_INTERFACE) private readonly authorizationService: IAuthorizationService,
     ) {}
 
     async execute(todoListId: TodoListId, userIdentity: UserIdentity): Promise<TodoList | undefined> {
         this.logger.log(`Starting CreateNewListUsecase`);
-        const transaction: ITransaction<QueryRunner> = this.dbService.newTransaction();
+        const transaction: ITransaction = this.dbService.newTransaction();
 
         try {
             transaction.start();

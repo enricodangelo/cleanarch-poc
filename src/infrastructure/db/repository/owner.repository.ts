@@ -1,4 +1,4 @@
-import { DeleteResult, InsertResult, QueryBuilder, QueryRunner } from 'typeorm';
+import { DeleteResult, InsertResult, QueryBuilder } from 'typeorm';
 import { CleanPocError, CLEANPOC_ERROR } from '../../../utils/error/CleanPocErrors';
 import { ITransaction } from '../../../domain/repository/transaction.interface';
 import { BaseRepository } from './base.repository';
@@ -10,12 +10,12 @@ import { OwnerId } from '../../../domain/model/ownerId';
 import { IOwnerRepository } from '../../../domain/repository/owner.repository.interface';
 
 @Injectable()
-export class OwnerRepository extends BaseRepository implements IOwnerRepository<QueryRunner> {
+export class OwnerRepository extends BaseRepository implements IOwnerRepository {
     constructor(private ownerEntityRepository: OwnerEntityRepository) {
         super();
     }
 
-    async save(owner: Owner, transaction?: ITransaction<QueryRunner>): Promise<Owner> {
+    async save(owner: Owner, transaction?: ITransaction): Promise<Owner> {
         const queryBuilder: QueryBuilder<OwnerEntity> = this.getQueryBuilder(this.ownerEntityRepository, 'owner', transaction);
 
         const entity: OwnerEntity = this.ownerModelToEntity(owner);
@@ -25,7 +25,7 @@ export class OwnerRepository extends BaseRepository implements IOwnerRepository<
         return this.ownerEntityToModel(entity);
     }
 
-    async findByPKey(ownerId: OwnerId, transaction?: ITransaction<QueryRunner>): Promise<Owner | undefined> {
+    async findByPKey(ownerId: OwnerId, transaction?: ITransaction): Promise<Owner | undefined> {
         const queryBuilder: QueryBuilder<OwnerEntity> = this.getQueryBuilder(this.ownerEntityRepository, 'owner', transaction);
 
         const res: OwnerEntity[] = await queryBuilder.select().where('id = :id', { id: ownerId.value }).getMany();
@@ -35,7 +35,7 @@ export class OwnerRepository extends BaseRepository implements IOwnerRepository<
         return res.length === 1 ? this.ownerEntityToModel(res[0]) : undefined;
     }
 
-    async delete(ownerId: OwnerId, transaction?: ITransaction<QueryRunner>): Promise<boolean> {
+    async delete(ownerId: OwnerId, transaction?: ITransaction): Promise<boolean> {
         const queryBuilder: QueryBuilder<OwnerEntity> = this.getQueryBuilder(this.ownerEntityRepository, 'owner', transaction);
 
         const delResult: DeleteResult = await queryBuilder.delete().where('id = :id', { id: ownerId.value }).execute();
