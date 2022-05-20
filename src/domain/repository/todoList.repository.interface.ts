@@ -4,12 +4,12 @@ import { ITransaction } from './transaction.interface';
 
 export const TODOLIST_REPOSITORY_INTERFACE = 'ITodoListRepository';
 
-export interface ITodoListRepository<T> {
-    save(todoList: TodoList, transaction?: ITransaction<T>): Promise<TodoList>;
+export interface ITodoListRepository {
+    save(todoList: TodoList, transaction?: ITransaction): Promise<StoredTodoList>;
 
-    update(todoList: StoredTodoList, transaction?: ITransaction<T>): Promise<TodoList>;
+    update(todoList: StoredTodoList, transaction?: ITransaction): Promise<StoredTodoList>;
 
-    findByPKey(todoListId: TodoListId, transaction?: ITransaction<T>): Promise<TodoList | undefined>;
+    findByPKey(todoListId: TodoListId, transaction?: ITransaction): Promise<StoredTodoList | undefined>;
 
-    delete(todoListId: TodoListId, transaction?: ITransaction<T>): Promise<boolean>;
+    delete(todoListId: TodoListId, transaction?: ITransaction): Promise<boolean>;
 }

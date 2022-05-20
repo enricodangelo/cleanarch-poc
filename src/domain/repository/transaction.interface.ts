@@ -1,5 +1,5 @@
-export interface ITransaction<T> {
-    context: T;
+export interface ITransaction {
+    context: any;
 
     isActive: boolean;
 

@@ -1,4 +1,4 @@
-import { DeleteResult, InsertResult, QueryBuilder, QueryRunner, UpdateResult } from 'typeorm';
+import { DeleteResult, InsertResult, QueryBuilder, UpdateResult } from 'typeorm';
 import { isStoredTask, StoredTask, Task } from '../../../domain/model/task';
 import { TaskId } from '../../../domain/model/taskId';
 import { isStoredTodoList, StoredTodoList, TodoList } from '../../../domain/model/todoList';
@@ -16,7 +16,7 @@ import { TaskEntityRepository } from './typeorm/taskEntity.repository';
 import { OwnerId } from '../../../domain/model/ownerId';
 
 @Injectable()
-export class TodoListRepository extends BaseRepository implements ITodoListRepository<QueryRunner> {
+export class TodoListRepository extends BaseRepository implements ITodoListRepository {
     constructor(
         private todoListEntityRepository: TodoListEntityRepository,
         private taskEntityRepository: TaskEntityRepository,
@@ -25,7 +25,7 @@ export class TodoListRepository extends BaseRepository implements ITodoListRepos
         super();
     }
 
-    async save(todoList: TodoList, transaction?: ITransaction<QueryRunner>): Promise<TodoList> {
+    async save(todoList: TodoList, transaction?: ITransaction): Promise<StoredTodoList> {
         const queryBuilder: QueryBuilder<TodoListEntity> = this.getQueryBuilder(this.todoListEntityRepository, 'todoList', transaction);
 
         // TODO only to use the variable
@@ -38,7 +38,7 @@ export class TodoListRepository extends BaseRepository implements ITodoListRepos
         return this.todoListEntityToModel(entity);
     }
 
-    async update(todoList: StoredTodoList, transaction?: ITransaction<QueryRunner>): Promise<TodoList> {
+    async update(todoList: StoredTodoList, transaction?: ITransaction): Promise<StoredTodoList> {
         const queryBuilder: QueryBuilder<TodoListEntity> = this.getQueryBuilder(this.todoListEntityRepository, 'todoList', transaction);
 
         const entity: TodoListEntity = this.todoListModelToEntity(todoList);
@@ -57,10 +57,14 @@ export class TodoListRepository extends BaseRepository implements ITodoListRepos
         } else if (affected === 0) {
             throw new CleanPocError(CLEANPOC_ERROR.ENTITY_NOT_FOUND, `Cannot update TodoList with id "${todoList.id}", entity not found`);
         }
-        return (await this.findByPKey(todoList.id)) as TodoList;
+        const res: StoredTodoList | undefined = await this.findByPKey(todoList.id);
+        if (!res) {
+            throw new Error(`This should never happen`);
+        }
+        return res;
     }
 
-    async findByPKey(todoListId: TodoListId, transaction?: ITransaction<QueryRunner>): Promise<TodoList | undefined> {
+    async findByPKey(todoListId: TodoListId, transaction?: ITransaction): Promise<StoredTodoList | undefined> {
         const queryBuilder: QueryBuilder<TodoListEntity> = this.getQueryBuilder(this.todoListEntityRepository, 'todoList', transaction);
 
         const res: TodoListEntity[] = await queryBuilder.select().where('id = :id', { id: todoListId.value }).getMany();
@@ -70,7 +74,7 @@ export class TodoListRepository extends BaseRepository implements ITodoListRepos
         return res.length === 1 ? this.todoListEntityToModel(res[0]) : undefined;
     }
 
-    async delete(todoListId: TodoListId, transaction?: ITransaction<QueryRunner>): Promise<boolean> {
+    async delete(todoListId: TodoListId, transaction?: ITransaction): Promise<boolean> {
         const queryBuilder: QueryBuilder<TodoListEntity> = this.getQueryBuilder(this.todoListEntityRepository, 'todoList', transaction);
 
         const delResult: DeleteResult = await queryBuilder.delete().where('id = :id', { id: todoListId.value }).execute();
@@ -81,7 +85,7 @@ export class TodoListRepository extends BaseRepository implements ITodoListRepos
         return true;
     }
 
-    public todoListEntityToModel(entity: TodoListEntity): TodoList {
+    public todoListEntityToModel(entity: TodoListEntity): StoredTodoList {
         return new StoredTodoList(
             new TodoListId(entity.id),
             entity.name,
