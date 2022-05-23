@@ -19,20 +19,20 @@ import { TypeOrmConfigService } from './typeormConfiguration.service';
             inject: [Connection],
             useClass: TypeOrmConfigService,
         }),
-        TodoListEntityRepository,
-        TaskEntityRepository,
-        OwnerEntityRepository,
-        // TypeOrmModule.forFeature([TodoListEntityRepository, TaskEntityRepository, OwnerEntityRepository]),
+        // TodoListEntityRepository,
+        // TaskEntityRepository,
+        // OwnerEntityRepository,
+        TypeOrmModule.forFeature([TodoListEntityRepository, TaskEntityRepository, OwnerEntityRepository]),
     ],
     providers: [
         { provide: DB_SERVICE_INTERFACE, useClass: DBService },
         { provide: TODOLIST_REPOSITORY_INTERFACE, useClass: TodoListRepository },
         TypeOrmConfigService,
-        TodoListEntityRepository,
-        TaskEntityRepository,
-        OwnerEntityRepository,
+        // TodoListEntityRepository,
+        // TaskEntityRepository,
+        // OwnerEntityRepository,
     ],
-    exports: [DB_SERVICE_INTERFACE, TODOLIST_REPOSITORY_INTERFACE, TypeOrmConfigService, TodoListEntityRepository, TaskEntityRepository, OwnerEntityRepository],
+    exports: [DB_SERVICE_INTERFACE, TODOLIST_REPOSITORY_INTERFACE, TypeOrmConfigService],
 })
 export class DatabaseModule {
     constructor() {
