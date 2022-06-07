@@ -1,5 +1,5 @@
-import { Owner } from '../model/owner';
-import { OwnerId } from '../model/ownerId';
+import { Owner } from '../../domain/model/owner';
+import { OwnerId } from '../../domain/model/ownerId';
 import { ITransaction } from './transaction.interface';
 
 export const OWNER_REPOSITORY_INTERFACE = 'IOwnerRepository';

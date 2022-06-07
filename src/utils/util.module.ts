@@ -14,7 +14,7 @@ import { ConfigurationSchema } from './configuration/configuration.validator';
     providers: [ConfigurationService],
     exports: [ConfigurationService],
 })
-export class UtilsModule {
+export class UtilModule {
     constructor() {
         Logger.debug(`UtilsModule constructed`);
     }

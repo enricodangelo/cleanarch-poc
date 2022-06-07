@@ -1,12 +1,12 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { AUTHORIZATION_SERVICE_INTERFACE, IAuthorizationService } from '../application/authorization.service.interface';
-import { TodoList } from '../domain/model/todoList';
-import { TodoListId } from '../domain/model/todoListId';
-import { UserIdentity } from '../domain/model/userIdentity';
-import { ITodoListRepository, TODOLIST_REPOSITORY_INTERFACE } from '../domain/repository/todoList.repository.interface';
-import { ITransaction } from '../domain/repository/transaction.interface';
-import { DB_SERVICE_INTERFACE, IDBService } from '../infrastructure/db/db.service.interface';
-import { CleanPocError, CLEANPOC_ERROR } from '../utils/error/CleanPocErrors';
+import { AUTHORIZATION_SERVICE_INTERFACE, IAuthorizationService } from '../authorization.service.interface';
+import { TodoList } from '../../domain/model/todoList';
+import { TodoListId } from '../../domain/model/todoListId';
+import { UserIdentity } from '../../domain/model/userIdentity';
+import { ITodoListRepository, TODOLIST_REPOSITORY_INTERFACE } from '../repository/todoList.repository.interface';
+import { ITransaction } from '../repository/transaction.interface';
+import { DB_SERVICE_INTERFACE, IDBService } from '../db.service.interface';
+import { CleanPocError, CLEANPOC_ERROR } from '../../utils/error/CleanPocErrors';
 import { IUsecase } from './usecase.interface';
 
 @Injectable()

@@ -1,10 +1,10 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { OwnerId } from '../domain/model/ownerId';
-import { TodoList } from '../domain/model/todoList';
-import { UserIdentity } from '../domain/model/userIdentity';
-import { ITodoListRepository, TODOLIST_REPOSITORY_INTERFACE } from '../domain/repository/todoList.repository.interface';
-import { ITransaction } from '../domain/repository/transaction.interface';
-import { DB_SERVICE_INTERFACE, IDBService } from '../infrastructure/db/db.service.interface';
+import { OwnerId } from '../../domain/model/ownerId';
+import { TodoList } from '../../domain/model/todoList';
+import { UserIdentity } from '../../domain/model/userIdentity';
+import { ITodoListRepository, TODOLIST_REPOSITORY_INTERFACE } from '../repository/todoList.repository.interface';
+import { ITransaction } from '../repository/transaction.interface';
+import { DB_SERVICE_INTERFACE, IDBService } from '../db.service.interface';
 import { IUsecase } from './usecase.interface';
 
 @Injectable()

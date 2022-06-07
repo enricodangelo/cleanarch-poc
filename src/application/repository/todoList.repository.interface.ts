@@ -1,5 +1,5 @@
-import { StoredTodoList, TodoList } from '../model/todoList';
-import { TodoListId } from '../model/todoListId';
+import { StoredTodoList, TodoList } from '../../domain/model/todoList';
+import { TodoListId } from '../../domain/model/todoListId';
 import { ITransaction } from './transaction.interface';
 
 export const TODOLIST_REPOSITORY_INTERFACE = 'ITodoListRepository';

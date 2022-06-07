@@ -1,17 +1,11 @@
-import { Injectable } from '@nestjs/common';
 import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
-import { Connection } from 'typeorm';
-import { IDBService } from '../../application/db.service.interface';
-import { ITransaction } from '../../application/repository/transaction.interface';
-import { Transaction } from './transaction';
 import { TaskEntity } from './entity/task.entity';
 import { OwnerEntity } from './entity/owner.entity';
 import { TodoListEntity } from './entity/todoList.entity';
 import { ConfigurationService } from '../../utils/configuration/configuration.service';
 
-@Injectable()
-export class DBService implements IDBService, TypeOrmOptionsFactory {
-    constructor(private readonly configurationService: ConfigurationService, private readonly connection: Connection) {}
+export class DBConfiguration implements TypeOrmOptionsFactory {
+    constructor(private readonly configurationService: ConfigurationService) {}
 
     async createTypeOrmOptions(): Promise<TypeOrmModuleOptions> {
         return {
@@ -25,9 +19,5 @@ export class DBService implements IDBService, TypeOrmOptionsFactory {
             synchronize: true,
             uuidExtension: 'pgcrypto',
         };
-    }
-
-    newTransaction(): ITransaction {
-        return new Transaction(this.connection.createQueryRunner());
     }
 }

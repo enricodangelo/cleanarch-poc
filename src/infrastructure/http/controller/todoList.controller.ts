@@ -3,8 +3,8 @@ import { Request, Response } from 'express';
 import { TodoList } from '../../../domain/model/todoList';
 import { TodoListId } from '../../../domain/model/todoListId';
 import { UserIdentity } from '../../../domain/model/userIdentity';
-import { CreateNewListUsecase } from '../../../usecase/createNewList.usecase';
-import { GetTodoListsByIdUsecase } from '../../../usecase/getTodoListsById.usecase';
+import { CreateNewListUsecase } from '../../../application/usecase/createNewList.usecase';
+import { GetTodoListsByIdUsecase } from '../../../application/usecase/getTodoListsById.usecase';
 
 @Controller('todolist')
 export class TodoListController {

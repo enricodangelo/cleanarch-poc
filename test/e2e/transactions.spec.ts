@@ -1,10 +1,10 @@
 import { Test } from '@nestjs/testing';
 import { OwnerId } from '../../src/domain/model/ownerId';
 import { StoredTodoList, TodoList } from '../../src/domain/model/todoList';
-import { ITodoListRepository } from '../../src/domain/repository/todoList.repository.interface';
-import { ITransaction } from '../../src/domain/repository/transaction.interface';
+import { ITodoListRepository } from '../../src/application/repository/todoList.repository.interface';
+import { ITransaction } from '../../src/application/repository/transaction.interface';
 import { DBService } from '../../src/infrastructure/db/db.service';
-import { IDBService } from '../../src/infrastructure/db/db.service.interface';
+import { IDBService } from '../../src/application/db.service.interface';
 import { TodoListRepository } from '../../src/infrastructure/db/repository/todoList.repository';
 import { v4 as uuidV4 } from 'uuid';
 import { inspect } from 'util';

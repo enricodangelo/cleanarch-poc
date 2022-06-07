@@ -1,5 +1,5 @@
 import { QueryRunner } from 'typeorm';
-import { ITransaction } from '../../domain/repository/transaction.interface';
+import { ITransaction } from '../../application/repository/transaction.interface';
 
 export class Transaction implements ITransaction {
     // TODO business exception if calling method after release (use internal state)

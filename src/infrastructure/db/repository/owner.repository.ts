@@ -1,13 +1,13 @@
 import { DeleteResult, InsertResult, QueryBuilder } from 'typeorm';
 import { CleanPocError, CLEANPOC_ERROR } from '../../../utils/error/CleanPocErrors';
-import { ITransaction } from '../../../domain/repository/transaction.interface';
+import { ITransaction } from '../../../application/repository/transaction.interface';
 import { BaseRepository } from './base.repository';
 import { Injectable } from '@nestjs/common';
 import { OwnerEntityRepository } from './typeorm/ownerEntity.repository';
 import { Owner } from '../../../domain/model/owner';
 import { OwnerEntity } from '../entity/owner.entity';
 import { OwnerId } from '../../../domain/model/ownerId';
-import { IOwnerRepository } from '../../../domain/repository/owner.repository.interface';
+import { IOwnerRepository } from '../../../application/repository/owner.repository.interface';
 
 @Injectable()
 export class OwnerRepository extends BaseRepository implements IOwnerRepository {

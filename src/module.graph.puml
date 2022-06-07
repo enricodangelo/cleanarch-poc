@@ -1,0 +1,42 @@
+@startuml
+
+component MainModule as main
+
+
+
+component UtilModule as util
+
+
+package "Infrastructure Layer" {
+  component HTTPModule as http
+  component DatabaseModule as db
+  component RabbitMqModule as rmq #lightgrey
+}
+
+' package "Usecase Layer" {
+'   component UsecaseModule as uc
+' }
+
+package "Application Layer" {
+  component UsecaseModule as uc
+  component ApplicationModule as app
+}
+
+package "Domain Layer" {
+  component DomaunModule as domain
+}
+
+main --> http
+main --> db
+
+http --> uc
+http -up-> util
+
+uc -> app
+
+app --> domain
+
+db --> app
+db -up-> util
+
+@enduml

@@ -1,10 +1,10 @@
 import { Logger, Module } from '@nestjs/common';
-import { RestApiModule } from './infrastructure/restapi/restapi.module';
+import { HTTPModule } from './infrastructure/http/http.module';
 
 @Module({
-    imports: [RestApiModule],
+    imports: [HTTPModule],
 })
-export class CleanArchModule {
+export class MainModule {
     constructor() {
         Logger.debug(`CleanArchModule constructed`);
     }
