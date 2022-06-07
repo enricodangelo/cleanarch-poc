@@ -9,7 +9,7 @@ import { TaskEntity } from '../entity/task.entity';
 import { TodoListEntity } from '../entity/todoList.entity';
 import { ITransaction } from '../../../application/repository/transaction.interface';
 import { BaseRepository } from './base.repository';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { TodoListEntityRepository } from './typeorm/todoListEntity.repository';
 import { OwnerEntityRepository } from './typeorm/ownerEntity.repository';
 import { TaskEntityRepository } from './typeorm/taskEntity.repository';
@@ -19,6 +19,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class TodoListRepository extends BaseRepository implements ITodoListRepository {
+    private readonly logger = new Logger(TodoListRepository.name);
     constructor(
         @InjectRepository(TodoListEntity) private todoListEntityRepository: TodoListEntityRepository,
         @InjectRepository(TaskEntity) private taskEntityRepository: TaskEntityRepository,
@@ -36,7 +37,8 @@ export class TodoListRepository extends BaseRepository implements ITodoListRepos
         const entity: TodoListEntity = this.todoListModelToEntity(todoList);
         const insertRes: InsertResult = await queryBuilder.insert().into(TodoListEntity).values(entity).execute();
 
-        entity.id = String(insertRes.identifiers[0]);
+        this.logger.log(`>>> insertRes: ${JSON.stringify(insertRes)}`);
+        entity.id = String(insertRes.identifiers[0].id);
         return this.todoListEntityToModel(entity);
     }
 
@@ -68,8 +70,10 @@ export class TodoListRepository extends BaseRepository implements ITodoListRepos
 
     async findByPKey(todoListId: TodoListId, transaction?: ITransaction): Promise<StoredTodoList | undefined> {
         const queryBuilder: QueryBuilder<TodoListEntity> = this.getQueryBuilder(this.todoListEntityRepository, 'todoList', transaction);
+        this.logger.log(`>>> todoListId: ${JSON.stringify(todoListId)}`);
 
         const res: TodoListEntity[] = await queryBuilder.select().where('id = :id', { id: todoListId.value }).getMany();
+        this.logger.log(`>>> res: ${JSON.stringify(res)}`);
         if (res.length > 1) {
             throw new CleanPocError(CLEANPOC_ERROR.TOO_MANY_ENTITIES, `Too many TodoList entities found with id "${todoListId}"`);
         }
@@ -88,13 +92,14 @@ export class TodoListRepository extends BaseRepository implements ITodoListRepos
     }
 
     public todoListEntityToModel(entity: TodoListEntity): StoredTodoList {
+        this.logger.log(`>>> entity: ${JSON.stringify(entity)}`);
         return new StoredTodoList(
             new TodoListId(entity.id),
             entity.name,
             entity.tasks.map((taskEntity) => {
                 return this.taskEntityToModel(taskEntity);
             }),
-            new OwnerId(entity.owner.userId),
+            new OwnerId(entity.ownerId),
         );
     }
 

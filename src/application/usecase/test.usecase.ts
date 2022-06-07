@@ -27,6 +27,7 @@ export class TestUsecase implements IUsecase<void> {
         this.logger.log(`transaction1: ${inspect(transaction1, { showHidden: true, depth: 2 })}`);
 
         const todoList: StoredTodoList = await this.todoListRepository.save(TodoList.createNewTodoList('todolist1', new OwnerId(uuidV4())), transaction1);
+        this.logger.log(`>>> todoList: ${JSON.stringify(todoList)}`);
         const retrievedTodoListInTransaction: StoredTodoList | undefined = await this.todoListRepository.findByPKey(todoList.id);
 
         this.logger.log(`retrievedTodoListInTransaction: ${JSON.stringify(retrievedTodoListInTransaction)} >> should be defined`);
