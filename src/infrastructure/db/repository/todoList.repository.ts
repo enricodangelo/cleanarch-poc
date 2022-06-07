@@ -14,13 +14,15 @@ import { TodoListEntityRepository } from './typeorm/todoListEntity.repository';
 import { OwnerEntityRepository } from './typeorm/ownerEntity.repository';
 import { TaskEntityRepository } from './typeorm/taskEntity.repository';
 import { OwnerId } from '../../../domain/model/ownerId';
+import { OwnerEntity } from '../entity/owner.entity';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class TodoListRepository extends BaseRepository implements ITodoListRepository {
     constructor(
-        private todoListEntityRepository: TodoListEntityRepository,
-        private taskEntityRepository: TaskEntityRepository,
-        private ownerEntityRepository: OwnerEntityRepository,
+        @InjectRepository(TodoListEntity) private todoListEntityRepository: TodoListEntityRepository,
+        @InjectRepository(TaskEntity) private taskEntityRepository: TaskEntityRepository,
+        @InjectRepository(OwnerEntity) private ownerEntityRepository: OwnerEntityRepository,
     ) {
         super();
     }

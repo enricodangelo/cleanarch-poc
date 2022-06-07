@@ -1,11 +1,12 @@
 import { Logger, Module } from '@nestjs/common';
-import { UsecaseModule } from '../../application/usecase/usecase.module';
+import { ApplicationModule } from '../../application/application.module';
 import { UtilModule } from '../../utils/util.module';
+import { TestController } from './controller/test.controller';
 import { TodoListController } from './controller/todoList.controller';
 
 @Module({
-    imports: [UsecaseModule, UtilModule],
-    controllers: [TodoListController],
+    imports: [ApplicationModule, UtilModule],
+    controllers: [TodoListController, TestController],
 })
 export class HTTPModule {
     constructor() {
