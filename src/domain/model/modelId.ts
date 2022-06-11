@@ -14,14 +14,8 @@ export abstract class ModelId<T> {
 
     abstract validateInput(value: T): boolean;
 
-    equals(otherEntity: ModelId<T>): boolean {
-        if (this.type != otherEntity.type) {
-            return false;
-        }
-        if (this.value !== otherEntity.value) {
-            return false;
-        }
-        return true;
+    equals(other: ModelId<T>): boolean {
+        return this.type === other.type && this.value === other.value;
     }
 
     toString(): string {

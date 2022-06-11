@@ -68,6 +68,10 @@ export class TodoList {
         });
         task.pos = newPos;
     }
+
+    equals(other: TodoList): boolean {
+        return this._name.localeCompare(other._name) === 0 && this.ownerId.equals(other.ownerId);
+    }
 }
 
 export class StoredTodoList extends TodoList {
@@ -76,6 +80,13 @@ export class StoredTodoList extends TodoList {
     constructor(id: TodoListId, name: string, tasks: Task[], ownerId: OwnerId) {
         super(name, tasks, ownerId);
         this.id = id;
+    }
+
+    equals(other: StoredTodoList | TodoList): boolean {
+        if (!isStoredTodoList(other)) {
+            return false;
+        }
+        return super.equals(other) && this.id.equals(other.id);
     }
 }
 

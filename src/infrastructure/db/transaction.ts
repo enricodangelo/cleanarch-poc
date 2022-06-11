@@ -9,6 +9,7 @@ export class Transaction implements ITransaction {
         this.queryRunner = queryRunner;
     }
 
+    // TODO add debugging logging when start/commit/rollback
     async start(): Promise<void> {
         await this.queryRunner.connect();
         await this.queryRunner.startTransaction();

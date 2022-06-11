@@ -26,6 +26,7 @@ export class GetTodoListsByIdUsecase implements IUsecase<TodoList | undefined> {
         try {
             transaction.start();
             const list: TodoList | undefined = await this.todoListRepository.findByPKey(todoListId);
+            // TODO all validations
             if (!list) {
                 throw new CleanPocError(CLEANPOC_ERROR.ENTITY_NOT_FOUND, `There's no Todo List with id "${todoListId}"`);
             }

@@ -17,7 +17,10 @@ export class TodoListController {
             res.status(HttpStatus.FORBIDDEN).send();
             return;
         }
+        // TODO convert input to other type
         const todoList: TodoList = await this.createNewListUsecase.execute(body.name, user as UserIdentity);
+        // TODO convert to output
+        // TODO validate output
         return todoList;
     }
 
