@@ -20,7 +20,9 @@ import { Test02Usecase } from './usecase/test02.usecase';
     exports: [AUTHORIZATION_SERVICE_INTERFACE, CreateNewListUsecase, GetTodoListsByIdUsecase, Test01Usecase, Test02Usecase],
 })
 export class ApplicationModule {
+    private readonly logger = new Logger(ApplicationModule.name);
+
     constructor() {
-        Logger.debug(`ApplicationModule constructed`);
+        this.logger.debug(`ApplicationModule constructed`);
     }
 }

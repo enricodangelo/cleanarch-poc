@@ -5,7 +5,9 @@ import { HTTPModule } from './infrastructure/http/http.module';
     imports: [HTTPModule],
 })
 export class MainModule {
+    private readonly logger = new Logger(MainModule.name);
+
     constructor() {
-        Logger.debug(`CleanArchModule constructed`);
+        this.logger.debug(`CleanArchModule constructed`);
     }
 }

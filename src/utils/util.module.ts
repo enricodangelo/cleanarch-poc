@@ -15,7 +15,9 @@ import { ConfigurationSchema } from './configuration/configuration.validator';
     exports: [ConfigurationService],
 })
 export class UtilModule {
+    private readonly logger = new Logger(UtilModule.name);
+
     constructor() {
-        Logger.debug(`UtilsModule constructed`);
+        this.logger.debug(`UtilsModule constructed`);
     }
 }

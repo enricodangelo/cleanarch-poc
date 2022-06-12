@@ -1,6 +1,8 @@
 export interface ITransaction {
     context: any;
 
+    id: string;
+
     isActive: boolean;
 
     isClosed: boolean;

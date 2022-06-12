@@ -9,7 +9,7 @@ import { TaskEntity } from '../entity/task.entity';
 import { TodoListEntity } from '../entity/todoList.entity';
 import { ITransaction } from '../../../application/repository/transaction.interface';
 import { BaseRepository } from './base.repository';
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { TodoListEntityRepository } from './typeorm/todoListEntity.repository';
 import { OwnerEntityRepository } from './typeorm/ownerEntity.repository';
 import { TaskEntityRepository } from './typeorm/taskEntity.repository';
@@ -19,7 +19,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class TodoListRepository extends BaseRepository implements ITodoListRepository {
-    private readonly logger = new Logger(TodoListRepository.name);
+    // private readonly logger = new Logger(TodoListRepository.name);
     constructor(
         @InjectRepository(TodoListEntity) private todoListEntityRepository: TodoListEntityRepository,
         @InjectRepository(TaskEntity) private taskEntityRepository: TaskEntityRepository,

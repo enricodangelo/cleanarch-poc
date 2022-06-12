@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
 import { ConfigurationService } from '../../utils/configuration/configuration.service';
+import { DatabaseLogger } from './db.logger';
 import { OwnerEntity } from './entity/owner.entity';
 import { TaskEntity } from './entity/task.entity';
 import { TodoListEntity } from './entity/todoList.entity';
@@ -20,6 +21,7 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
             entities: [TodoListEntity, TaskEntity, OwnerEntity],
             synchronize: true,
             uuidExtension: 'pgcrypto',
+            logger: new DatabaseLogger(),
         };
     }
 }

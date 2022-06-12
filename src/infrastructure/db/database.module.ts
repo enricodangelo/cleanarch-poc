@@ -36,7 +36,9 @@ import { OwnerEntity } from './entity/owner.entity';
     exports: [DB_SERVICE_INTERFACE, TODOLIST_REPOSITORY_INTERFACE],
 })
 export class DatabaseModule {
+    private readonly logger = new Logger(DatabaseModule.name);
+
     constructor() {
-        Logger.debug(`DatabaseModule constructed`);
+        this.logger.debug(`DatabaseModule constructed`);
     }
 }
